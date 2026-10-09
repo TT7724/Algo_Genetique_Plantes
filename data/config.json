@@ -1,0 +1,22 @@
+{
+  "algorithme": {
+    "population": 100,
+    "generations_max": 200,
+    "taux_croisement": 0.8,
+    "taux_mutation": 0.1,
+    "elitisme": 2,
+    "selection": "tournoi",
+    "seed": 42,
+    "early_stopping": {
+      "patience": 30,
+      "seuil_amelioration": 0.001
+    },
+    "taille_cellule_cm": 10,
+    "seuil_invasif_cm2": 2000
+  },
+  "chemins": {
+    "plantes": "data/plantes.json",
+    "bacs": "data/bacs.json",
+    "interactions": "data/interactions.json"
+  }
+}
