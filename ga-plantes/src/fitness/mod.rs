@@ -1,3 +1,3 @@
-pub mod fitness;
+pub mod eval;
 
-pub use fitness::*;
+pub use eval::*;
