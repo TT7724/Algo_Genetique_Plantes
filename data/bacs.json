@@ -1,1 +1,70 @@
-[]
+[
+  {
+    "id": "reference",
+    "nom": "Bac de référence",
+    "dimensions_cm": {
+      "longueur": 120,
+      "largeur": 80,
+      "hauteur": 30
+    },
+    "hauteur_terre_cm": 25,
+    "marge_bord_cm": 5,
+    "protection": "exterieur",
+    "substrats": [
+      "terreau",
+      "compost"
+    ],
+    "compost_disponible": true,
+    "drainage_eau": false,
+    "exposition": "plein_soleil",
+    "saison_cible": "ete",
+    "temp_moyenne_c": {
+      "min": 15,
+      "max": 30
+    }
+  },
+  {
+    "id": "contraint",
+    "nom": "Bac contraint",
+    "dimensions_cm": {
+      "longueur": 100,
+      "largeur": 60,
+      "hauteur": 20
+    },
+    "hauteur_terre_cm": 15,
+    "marge_bord_cm": 3,
+    "protection": "serre_froide",
+    "substrats": [
+      "fibre_de_coco"
+    ],
+    "compost_disponible": false,
+    "drainage_eau": false,
+    "exposition": "miombre",
+    "saison_cible": "printemps",
+    "temp_moyenne_c": {
+      "min": 10,
+      "max": 20
+    }
+  },
+  {
+    "id": "hydro",
+    "nom": "Bac hydroponique",
+    "dimensions_cm": {
+      "longueur": 150,
+      "largeur": 100,
+      "hauteur": 25
+    },
+    "hauteur_terre_cm": 0,
+    "marge_bord_cm": 2,
+    "protection": "serre_chauffee",
+    "substrats": [],
+    "compost_disponible": false,
+    "drainage_eau": true,
+    "exposition": "plein_soleil",
+    "saison_cible": "ete",
+    "temp_moyenne_c": {
+      "min": 20,
+      "max": 30
+    }
+  }
+]
