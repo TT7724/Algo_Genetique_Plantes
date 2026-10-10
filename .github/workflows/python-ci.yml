@@ -1,0 +1,24 @@
+name: Python CI
+
+on:
+  push:
+    paths: ["orchestrator/**"]
+  pull_request:
+    paths: ["orchestrator/**"]
+
+defaults:
+  run:
+    working-directory: orchestrator
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Compilation check
+        run: python -m compileall .
+      - name: Installation des dépendances
+        run: pip install -r requirements.txt

@@ -1,0 +1,12 @@
+[package]
+name = "ga-plantes"
+version = "0.1.0"
+edition = "2021"
+description = "Algorithme génétique pour optimiser les combinaisons de plantes dans un bac."
+license = "MIT"
+
+[dependencies]
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+rand = "0.8"
+clap = { version = "4.0", features = ["derive"] }
