@@ -1,1 +1,188 @@
-[]
+[
+  {
+    "id": "tomate",
+    "nom": "Tomate",
+    "famille": "Solanacées",
+    "hauteur_cm": 150,
+    "profondeur_racines_cm": 40,
+    "taux_croissance": "moyenne",
+    "espacement_min_cm": 50,
+    "exposition": "plein_soleil",
+    "temperature_c": {
+      "min_survie": 10,
+      "optimal_min": 20,
+      "optimal_max": 28,
+      "max_survie": 35
+    },
+    "besoins_nutriments": {
+      "N": "eleve",
+      "P": "eleve",
+      "K": "moyen"
+    },
+    "besoin_eau": "eleve",
+    "enracinement_eau": false,
+    "substrats_compatibles": [
+      "terreau",
+      "compost"
+    ],
+    "saison": [
+      "ete"
+    ],
+    "rendement": {
+      "valeur": 4.5,
+      "unite": "kg/m2",
+      "duree_jours": 90,
+      "source": null,
+      "niveau_confiance": "faible"
+    }
+  },
+  {
+    "id": "laitue",
+    "nom": "Laitue à couper",
+    "famille": "Astéracées",
+    "hauteur_cm": 30,
+    "profondeur_racines_cm": 15,
+    "taux_croissance": "moyenne",
+    "espacement_min_cm": 25,
+    "exposition": "miombre",
+    "temperature_c": {
+      "min_survie": 5,
+      "optimal_min": 10,
+      "optimal_max": 20,
+      "max_survie": 25
+    },
+    "besoins_nutriments": {
+      "N": "moyen",
+      "P": "faible",
+      "K": "eleve"
+    },
+    "besoin_eau": "moyen",
+    "enracinement_eau": true,
+    "substrats_compatibles": [
+      "fibre_de_coco",
+      "terreau"
+    ],
+    "saison": [
+      "printemps",
+      "automne"
+    ],
+    "rendement": {
+      "valeur": 2.1,
+      "unite": "kg/m2",
+      "duree_jours": 60,
+      "source": null,
+      "niveau_confiance": "faible"
+    }
+  },
+  {
+    "id": "carotte",
+    "nom": "Carotte primeur",
+    "famille": "Apiacées",
+    "hauteur_cm": 50,
+    "profondeur_racines_cm": 30,
+    "taux_croissance": "lente",
+    "espacement_min_cm": 15,
+    "exposition": "plein_soleil",
+    "temperature_c": {
+      "min_survie": 7,
+      "optimal_min": 12,
+      "optimal_max": 20,
+      "max_survie": 25
+    },
+    "besoins_nutriments": {
+      "N": "faible",
+      "P": "eleve",
+      "K": "moyen"
+    },
+    "besoin_eau": "faible",
+    "enracinement_eau": false,
+    "substrats_compatibles": [
+      "sableux",
+      "terreau"
+    ],
+    "saison": [
+      "printemps",
+      "automne"
+    ],
+    "rendement": {
+      "valeur": 3,
+      "unite": "kg/m2",
+      "duree_jours": 80,
+      "source": null,
+      "niveau_confiance": "faible"
+    }
+  },
+  {
+    "id": "basilic",
+    "nom": "Basilic génovese",
+    "famille": "Lamiacées",
+    "hauteur_cm": 40,
+    "profondeur_racines_cm": 10,
+    "taux_croissance": "moyenne",
+    "espacement_min_cm": 20,
+    "exposition": "plein_soleil",
+    "temperature_c": {
+      "min_survie": 10,
+      "optimal_min": 15,
+      "optimal_max": 25,
+      "max_survie": 30
+    },
+    "besoins_nutriments": {
+      "N": "moyen",
+      "P": "faible",
+      "K": "eleve"
+    },
+    "besoin_eau": "moyen",
+    "enracinement_eau": true,
+    "substrats_compatibles": [
+      "fibre_de_coco"
+    ],
+    "saison": [
+      "ete"
+    ],
+    "rendement": {
+      "valeur": 1.8,
+      "unite": "kg/m2",
+      "duree_jours": 70,
+      "source": null,
+      "niveau_confiance": "faible"
+    }
+  },
+  {
+    "id": "courgette",
+    "nom": "Courgette ronde de Nice",
+    "famille": "Cucurbitacées",
+    "hauteur_cm": 100,
+    "profondeur_racines_cm": 50,
+    "taux_croissance": "invasive",
+    "espacement_min_cm": 80,
+    "exposition": "plein_soleil",
+    "temperature_c": {
+      "min_survie": 12,
+      "optimal_min": 18,
+      "optimal_max": 28,
+      "max_survie": 35
+    },
+    "besoins_nutriments": {
+      "N": "eleve",
+      "P": "eleve",
+      "K": "eleve"
+    },
+    "besoin_eau": "eleve",
+    "enracinement_eau": false,
+    "substrats_compatibles": [
+      "terreau",
+      "compost"
+    ],
+    "saison": [
+      "ete"
+    ],
+    "rendement": {
+      "valeur": 6,
+      "unite": "kg/m2",
+      "duree_jours": 100,
+      "source": null,
+      "niveau_confiance": "faible"
+    }
+  }
+]
