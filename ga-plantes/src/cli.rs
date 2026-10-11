@@ -1,6 +1,6 @@
 use serde::Deserialize;
 use std::fs;
-use std::path::PathBuf;
+use std::path::{Path, PathBuf};
 use thiserror::Error;
 
 use crate::models::{Bac, Plante};
@@ -49,6 +49,9 @@ pub enum Confiance {
     Moyenne,
 }
 
+/// Toutes les données chargées depuis `data/`, prêtes pour le moteur.
+pub type DonneesChargees = (Vec<Plante>, Vec<Bac>, Vec<Interaction>, Config);
+
 // --- Erreurs ---
 #[derive(Error, Debug)]
 pub enum CliError {
@@ -78,7 +81,7 @@ pub struct Args {
 }
 
 /// Charge et désérialise un fichier JSON vers le type `T`.
-fn load_json<T: serde::de::DeserializeOwned>(path: &PathBuf) -> Result<T, CliError> {
+fn load_json<T: serde::de::DeserializeOwned>(path: &Path) -> Result<T, CliError> {
     let content = fs::read_to_string(path)
         .map_err(|_| CliError::FileNotFound { chemin: path.display().to_string() })?;
 
@@ -125,9 +128,9 @@ pub fn validate_references(
 
 /// Charge et valide toutes les données depuis `data_dir`.
 pub fn load_and_validate_data(
-    data_dir: &PathBuf,
-    config_path: &PathBuf,
-) -> Result<(Vec<Plante>, Vec<Bac>, Vec<Interaction>, Config), CliError> {
+    data_dir: &Path,
+    config_path: &Path,
+) -> Result<DonneesChargees, CliError> {
     let plantes = load_json::<Vec<Plante>>(&data_dir.join("plantes.json"))?;
     let bacs = load_json::<Vec<Bac>>(&data_dir.join("bacs.json"))?;
     let interactions = load_json::<Vec<Interaction>>(&data_dir.join("interactions.json"))?;
