@@ -44,7 +44,7 @@
     "profondeur_racines_cm": 15,
     "taux_croissance": "moyenne",
     "espacement_min_cm": 25,
-    "exposition": "miombre",
+    "exposition": "mi_ombre",
     "temperature_c": {
       "min_survie": 5,
       "optimal_min": 10,
