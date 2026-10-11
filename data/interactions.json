@@ -1,1 +1,72 @@
-[]
+[
+  {
+    "plante_a": "tomate",
+    "plante_b": "laitue",
+    "type": "competition_racinaire",
+    "intensite": "moyenne",
+    "confiance": "faible"
+  },
+  {
+    "plante_a": "tomate",
+    "plante_b": "carotte",
+    "type": "neutre",
+    "intensite": "faible",
+    "confiance": "faible"
+  },
+  {
+    "plante_a": "tomate",
+    "plante_b": "basilic",
+    "type": "compagnonnage",
+    "intensite": "forte",
+    "confiance": "moyenne"
+  },
+  {
+    "plante_a": "tomate",
+    "plante_b": "courgette",
+    "type": "competition_eau",
+    "intensite": "forte",
+    "confiance": "moyenne"
+  },
+  {
+    "plante_a": "laitue",
+    "plante_b": "carotte",
+    "type": "compagnonnage",
+    "intensite": "moyenne",
+    "confiance": "moyenne"
+  },
+  {
+    "plante_a": "laitue",
+    "plante_b": "basilic",
+    "type": "neutre",
+    "intensite": "faible",
+    "confiance": "faible"
+  },
+  {
+    "plante_a": "laitue",
+    "plante_b": "courgette",
+    "type": "competition_lumiere",
+    "intensite": "faible",
+    "confiance": "faible"
+  },
+  {
+    "plante_a": "carotte",
+    "plante_b": "basilic",
+    "type": "neutre",
+    "intensite": "faible",
+    "confiance": "faible"
+  },
+  {
+    "plante_a": "carotte",
+    "plante_b": "courgette",
+    "type": "competition_racinaire",
+    "intensite": "moyenne",
+    "confiance": "faible"
+  },
+  {
+    "plante_a": "basilic",
+    "plante_b": "courgette",
+    "type": "compagnonnage",
+    "intensite": "moyenne",
+    "confiance": "faible"
+  }
+]
