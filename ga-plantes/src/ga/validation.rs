@@ -29,7 +29,12 @@ pub enum ValidationError {
 
 /// Vérifie que la combinaison respecte **toutes** les contraintes dures.
 /// **Note** : un bac vide est autorisé (la fitness s'en chargera).
+/// **Bac hydroponique** (`drainage_eau = true`) : les contraintes
+/// "racines <= hauteur de terre" et "substrat commun" sont neutralisées —
+/// les racines vivent dans l'eau, il n'y a ni terre ni substrat.
 pub fn est_valide(combinaison: &Combinaison, config: &Config) -> Result<(), ValidationError> {
+    let est_hydro = combinaison.bac.drainage_eau;
+
     // 1. Surface totale des plantes <= surface utile du bac
     // Approximation conservative : chaque plante occupe un carré de côté = espacement_min_cm
     let surface_totale: i64 = combinaison
@@ -44,13 +49,15 @@ pub fn est_valide(combinaison: &Combinaison, config: &Config) -> Result<(), Vali
         ));
     }
 
-    // 2. Profondeur des racines <= hauteur de terre du bac
-    for plante in &combinaison.plantes {
-        if plante.profondeur_racines_cm > combinaison.bac.hauteur_terre_cm {
-            return Err(ValidationError::RacinesTropProfondes(
-                plante.profondeur_racines_cm,
-                combinaison.bac.hauteur_terre_cm,
-            ));
+    // 2. Profondeur des racines <= hauteur de terre (sauf bac hydro)
+    if !est_hydro {
+        for plante in &combinaison.plantes {
+            if plante.profondeur_racines_cm > combinaison.bac.hauteur_terre_cm {
+                return Err(ValidationError::RacinesTropProfondes(
+                    plante.profondeur_racines_cm,
+                    combinaison.bac.hauteur_terre_cm,
+                ));
+            }
         }
     }
 
@@ -61,16 +68,18 @@ pub fn est_valide(combinaison: &Combinaison, config: &Config) -> Result<(), Vali
         }
     }
 
-    // 4. Substrats : au moins un substrat commun entre plante et bac
-    for plante in &combinaison.plantes {
-        let substrats_plante = &plante.substrats_compatibles;
-        let substrats_bac = &combinaison.bac.substrats;
-        if !substrats_plante.iter().any(|s| substrats_bac.contains(s)) {
-            return Err(ValidationError::SubstratIncompatible(
-                plante.id.clone(),
-                substrats_plante.clone(),
-                substrats_bac.clone(),
-            ));
+    // 4. Substrats : au moins un substrat commun entre plante et bac (sauf bac hydro)
+    if !est_hydro {
+        for plante in &combinaison.plantes {
+            let substrats_plante = &plante.substrats_compatibles;
+            let substrats_bac = &combinaison.bac.substrats;
+            if !substrats_plante.iter().any(|s| substrats_bac.contains(s)) {
+                return Err(ValidationError::SubstratIncompatible(
+                    plante.id.clone(),
+                    substrats_plante.clone(),
+                    substrats_bac.clone(),
+                ));
+            }
         }
     }
 
