@@ -6,6 +6,7 @@ use super::plant::{Exposition, Saison};
 
 #[derive(Debug, Clone, Deserialize)]
 pub struct Bac {
+    pub id: String,
     pub nom: String,
     pub dimensions_cm: DimensionsCm,
     pub hauteur_terre_cm: u32,
