@@ -1,5 +1,5 @@
 use crate::cli::Config;
-use crate::models::{Combinaison, Plante, Saison, TauxCroissance};
+use crate::models::{Combinaison, Saison, TauxCroissance};
 use thiserror::Error;
 
 /// Erreurs de validation des contraintes dures.
