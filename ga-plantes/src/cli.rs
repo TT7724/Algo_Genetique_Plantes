@@ -16,15 +16,6 @@ pub struct Interaction {
 }
 
 #[derive(Debug, Deserialize, Clone)]
-pub struct Config {
-    pub population_size: usize,
-    pub mutation_rate: f64,
-    pub crossover_rate: f64,
-    pub max_generations: usize,
-    pub early_stopping: Option<usize>,
-}
-
-#[derive(Debug, Deserialize, Clone)]
 #[serde(rename_all = "snake_case")]
 pub enum InteractionType {
     Compagnonnage,
@@ -47,6 +38,40 @@ pub enum Intensite {
 pub enum Confiance {
     Faible,
     Moyenne,
+}
+
+/// Configuration AG — miroir exact de `data/config.json`.
+#[derive(Debug, Deserialize, Clone)]
+pub struct Config {
+    pub algorithme: Algorithme,
+    pub chemins: Chemins,
+}
+
+#[derive(Debug, Deserialize, Clone)]
+pub struct Algorithme {
+    pub population: usize,
+    pub generations_max: usize,
+    pub taux_croisement: f64,
+    pub taux_mutation: f64,
+    pub elitisme: usize,
+    pub selection: String,
+    pub seed: u64,
+    pub early_stopping: EarlyStopping,
+    pub taille_cellule_cm: u32,
+    pub seuil_invasif_cm2: i64,
+}
+
+#[derive(Debug, Deserialize, Clone)]
+pub struct EarlyStopping {
+    pub patience: usize,
+    pub seuil_amelioration: f64,
+}
+
+#[derive(Debug, Deserialize, Clone)]
+pub struct Chemins {
+    pub plantes: String,
+    pub bacs: String,
+    pub interactions: String,
 }
 
 /// Toutes les données chargées depuis `data/`, prêtes pour le moteur.
