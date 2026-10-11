@@ -70,10 +70,10 @@ pub enum CliError {
 #[command(name = "ga-potager-cli")]
 #[command(version = "0.1.0")]
 pub struct Args {
-    #[arg(short, long, default = "data/")]
+    #[arg(short, long, default_value = "data/")]
     pub data_dir: PathBuf,
 
-    #[arg(short, long, default = "data/config.json")]
+    #[arg(short, long, default_value = "data/config.json")]
     pub config_path: PathBuf,
 }
 
