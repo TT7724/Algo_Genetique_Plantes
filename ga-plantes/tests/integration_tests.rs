@@ -38,15 +38,15 @@ fn test_carotte_dans_bac_contraint_invalide() {
 }
 
 #[test]
-fn test_laitue_dans_bac_hydro_valide() {
+fn test_basilic_dans_bac_hydro_valide() {
     // Valide le fix hydroponique : un bac hydro (0 cm de terre, aucun
     // substrat) doit pouvoir accueillir une plante à enracinement eau.
     let (plantes, bacs, _, config) = charger_donnees();
     let bac_hydro = bacs.iter().find(|b| b.id == "hydro").expect("Bac 'hydro' introuvable");
-    let laitue = plantes.iter().find(|p| p.id == "laitue").expect("Plante 'laitue' introuvable");
+    let basilic = plantes.iter().find(|p| p.id == "basilic").expect("Plante 'basilic' introuvable");
 
-    let combinaison = Combinaison::new(vec![laitue.clone()], bac_hydro.clone());
+    let combinaison = Combinaison::new(vec![basilic.clone()], bac_hydro.clone());
     let result = est_valide(&combinaison, &config);
 
-    assert!(result.is_ok(), "La laitue devrait être valide dans le bac hydroponique : {result:?}");
+    assert!(result.is_ok(), "Le basilic devrait être valide dans le bac hydroponique : {result:?}");
 }
