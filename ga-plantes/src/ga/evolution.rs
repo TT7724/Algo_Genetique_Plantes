@@ -88,15 +88,9 @@ where
         let best_idx = indices[0];
         let current_best_score = scores[best_idx];
 
-        // c. Mise à jour du meilleur global (toute amélioration compte)
-        if current_best_score > meilleur_score_global {
-            meilleur_score_global = current_best_score;
-            meilleur_individu_global = Some(population[best_idx].clone());
-        }
-
-        // d. Early stopping : stagnation au-delà du seuil d'amélioration
+        // c. Early stopping : l'amélioration se mesure AVANT la mise à jour du meilleur global
         let amelioration = current_best_score - meilleur_score_global;
-        if amelioration > seuil_amelioration || meilleur_score_global == current_best_score && generation == 0 {
+        if amelioration > seuil_amelioration {
             patience = 0;
         } else {
             patience += 1;
@@ -106,6 +100,12 @@ where
                     generations: generations_execuees,
                 });
             }
+        }
+
+        // d. Mise à jour du meilleur global (toute amélioration compte)
+        if current_best_score > meilleur_score_global {
+            meilleur_score_global = current_best_score;
+            meilleur_individu_global = Some(population[best_idx].clone());
         }
 
         // e. Élitisme : les `elitisme` meilleurs passent intacts
