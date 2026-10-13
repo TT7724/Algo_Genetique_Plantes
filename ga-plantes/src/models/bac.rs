@@ -6,6 +6,7 @@ use super::plant::{Exposition, Saison};
 
 #[derive(Debug, Clone, Deserialize)]
 pub struct Bac {
+    pub id: String,
     pub nom: String,
     pub dimensions_cm: DimensionsCm,
     pub hauteur_terre_cm: u32,
@@ -33,7 +34,7 @@ pub struct TempMoyenneC {
 }
 
 #[derive(Debug, Clone, Copy, Deserialize, PartialEq)]
-#[serde(rename_all = "lowercase")]
+#[serde(rename_all = "snake_case")]
 pub enum Protection { Exterieur, SerreFroide, SerreChauffee }
 
 impl Bac {

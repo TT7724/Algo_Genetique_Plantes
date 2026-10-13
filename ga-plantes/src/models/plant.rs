@@ -12,6 +12,7 @@ pub struct Plante {
     pub profondeur_racines_cm: u32,
     pub taux_croissance: TauxCroissance,
     pub enracinement_eau: bool,
+    #[serde(rename = "saison")]
     pub saisons: Vec<Saison>,
     pub exposition: Exposition,
     pub substrats_compatibles: Vec<String>,
@@ -30,7 +31,7 @@ pub enum TauxCroissance { Lente, Moyenne, Invasive }
 pub enum Saison { Printemps, Ete, Automne, Hiver }
 
 #[derive(Debug, Clone, Copy, Deserialize, PartialEq)]
-#[serde(rename_all = "lowercase")]
+#[serde(rename_all = "snake_case")]
 pub enum Exposition { PleinSoleil, MiOmbre, Ombre }
 
 #[derive(Debug, Clone, Copy, Deserialize, PartialEq)]
@@ -46,6 +47,7 @@ pub struct TemperatureC {
 }
 
 #[derive(Debug, Clone, Deserialize)]
+#[serde(rename_all = "UPPERCASE")]
 pub struct BesoinsNutriments {
     pub n: Niveau,
     pub p: Niveau,

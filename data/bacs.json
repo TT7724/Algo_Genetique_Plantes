@@ -39,7 +39,7 @@
     ],
     "compost_disponible": false,
     "drainage_eau": false,
-    "exposition": "miombre",
+    "exposition": "mi_ombre",
     "saison_cible": "printemps",
     "temp_moyenne_c": {
       "min": 10,
