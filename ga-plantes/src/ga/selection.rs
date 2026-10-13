@@ -14,27 +14,26 @@ pub enum SelectionError {
 }
 
 /// Sélectionne un individu par tournoi parmi la population.
-/// - **Reproductibilité** : utilise un générateur aléatoire (`rng`) passé en paramètre.
-///   **Note** : La graine (`seed`) est semée une seule fois dans `evolution.rs`.
-/// - **Tirage avec remise** : un même individu peut être tiré plusieurs fois dans un tournoi.
-/// - **Fonction de scoring** : fournie par l'utilisateur (ex: `fitness::eval::evaluer`).
-///   **Note** : Le moteur ne contient **aucune** logique de fitness.
+/// - **Scores précalculés** : la fitness est calculée **une fois par génération**
+///   par `evolution.rs` ; la sélection lit dans le slice, elle ne recalcule rien.
+/// - **Tirage avec remise** : un même individu peut être tiré plusieurs fois.
 ///
 /// # Arguments
 /// * `population` - Liste des combinaisons candidates.
 /// * `taille_tournoi` - Nombre d'individus tirés aléatoirement pour le tournoi.
-/// * `rng` - Générateur aléatoire mutable (ex: `&mut StdRng`).
-/// * `score_fn` - Fonction de scoring (fitness) fournie par l'utilisateur.
-pub fn selection_tournoi<'a, F>(
-    population: &'a [Combinaison],
+/// * `scores` - Fitness précalculées, alignées avec `population` (même longueur).
+/// * `rng` - Générateur aléatoire mutable (graine semée dans `evolution.rs`).
+pub fn selection_tournoi(
+    population: &[Combinaison],
     taille_tournoi: usize,
+    scores: &[f64],
     rng: &mut StdRng,
-    score_fn: F,
-) -> Result<&'a Combinaison, SelectionError>
-where
-    F: Fn(&Combinaison) -> f64,
-{
+) -> Result<&Combinaison, SelectionError> {
     if population.is_empty() {
+        return Err(SelectionError::PopulationVide);
+    }
+    if scores.len() != population.len() {
+        // Invariant défensif : les scores doivent être alignés sur la population
         return Err(SelectionError::PopulationVide);
     }
     if taille_tournoi == 0 || taille_tournoi > population.len() {
@@ -42,21 +41,17 @@ where
     }
 
     // Tirer le premier individu pour initialiser le champion
-    let best_idx = rng.gen_range(0..population.len());
-    let mut best = &population[best_idx];
-    let mut best_score = score_fn(best);
+    let mut best_idx = rng.gen_range(0..population.len());
+    let mut best_score = scores[best_idx];
 
     // Tirer les k-1 autres individus et comparer
     for _ in 1..taille_tournoi {
         let idx = rng.gen_range(0..population.len());
-        let candidate = &population[idx];
-        let candidate_score = score_fn(candidate);
-
-        if candidate_score > best_score {
-            best = candidate;
-            best_score = candidate_score;
+        if scores[idx] > best_score {
+            best_idx = idx;
+            best_score = scores[idx];
         }
     }
 
-    Ok(best)
+    Ok(&population[best_idx])
 }
