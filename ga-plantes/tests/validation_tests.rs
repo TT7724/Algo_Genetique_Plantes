@@ -68,6 +68,7 @@ fn bac_test(
     drainage_eau: bool,
 ) -> Bac {
     Bac {
+        id: "test_bac".to_string(),
         nom: "Bac Test".to_string(),
         dimensions_cm: DimensionsCm {
             longueur,

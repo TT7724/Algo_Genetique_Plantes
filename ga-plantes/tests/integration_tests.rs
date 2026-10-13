@@ -1,11 +1,11 @@
+//! Tests d'intégration sur les VRAIES données de `data/`.
+//! Le répertoire courant à l'exécution des tests est la crate
+//! (`ga-plantes/`), d'où les chemins relatifs en `../data/`.
+
 use ga_plantes::cli::load_and_validate_data;
 use ga_plantes::ga::validation::{est_valide, ValidationError};
 use ga_plantes::models::Combinaison;
 use std::path::Path;
-
-//! Tests d'intégration sur les VRAIES données de `data/`.
-//! Le répertoire courant à l'exécution des tests est la crate
-//! (`ga-plantes/`), d'où les chemins relatifs en `../data/`.
 
 fn charger_donnees() -> (Vec<ga_plantes::models::Plante>, Vec<ga_plantes::models::Bac>, Vec<ga_plantes::cli::Interaction>, ga_plantes::cli::Config) {
     let data_dir = Path::new("../data/");
