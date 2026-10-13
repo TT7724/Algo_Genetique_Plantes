@@ -122,7 +122,7 @@ fn s(v: &str) -> String {
 #[test]
 fn test_surface_valide() {
     // Surface utile : (100-10) x (100-10) = 8100 cm² ; plante : 50² = 2500 cm²
-    let bac = bac_test(100, 100, 30, vec![s("terreau")], Saison::Ete, 15, 30, false);
+    let bac = bac_test(100, 100, 50, vec![s("terreau")], Saison::Ete, 15, 30, false);
     let plantes = vec![plante_test("tomate", 50, 40, false, vec![s("terreau")], vec![Saison::Ete], 10, 35, TauxCroissance::Moyenne)];
     let c = Combinaison::new(plantes, bac);
     assert!(est_valide(&c, &config_test(10000)).is_ok());
@@ -131,7 +131,7 @@ fn test_surface_valide() {
 #[test]
 fn test_surface_invalide() {
     // Surface utile : (50-10)² = 1600 cm² ; plantes : 2500 + 6400 = 8900 cm²
-    let bac = bac_test(50, 50, 30, vec![s("terreau")], Saison::Ete, 15, 30, false);
+    let bac = bac_test(50, 50, 50, vec![s("terreau")], Saison::Ete, 15, 30, false);
     let plantes = vec![
         plante_test("tomate", 50, 40, false, vec![s("terreau")], vec![Saison::Ete], 10, 35, TauxCroissance::Moyenne),
         plante_test("courgette", 80, 50, false, vec![s("terreau")], vec![Saison::Ete], 12, 35, TauxCroissance::Invasive),
@@ -236,7 +236,7 @@ fn test_temperature_invalide() {
 #[test]
 fn test_invasive_valide() {
     // Surface utile : 190² = 36100 cm² >= seuil 30000 -> OK
-    let bac = bac_test(200, 200, 30, vec![s("terreau")], Saison::Ete, 15, 30, false);
+    let bac = bac_test(200, 200, 50, vec![s("terreau")], Saison::Ete, 15, 30, false);
     let plantes = vec![plante_test("courgette", 80, 50, false, vec![s("terreau")], vec![Saison::Ete], 12, 35, TauxCroissance::Invasive)];
     let c = Combinaison::new(plantes, bac);
     assert!(est_valide(&c, &config_test(30000)).is_ok());
@@ -245,7 +245,7 @@ fn test_invasive_valide() {
 #[test]
 fn test_invasive_invalide() {
     // Surface utile : 90² = 8100 cm² < seuil 10000 -> refusée
-    let bac = bac_test(100, 100, 30, vec![s("terreau")], Saison::Ete, 15, 30, false);
+    let bac = bac_test(100, 100, 50, vec![s("terreau")], Saison::Ete, 15, 30, false);
     let plantes = vec![plante_test("courgette", 80, 50, false, vec![s("terreau")], vec![Saison::Ete], 12, 35, TauxCroissance::Invasive)];
     let c = Combinaison::new(plantes, bac);
     assert!(matches!(
