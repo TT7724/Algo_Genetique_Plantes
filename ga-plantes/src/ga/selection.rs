@@ -23,12 +23,12 @@ pub enum SelectionError {
 /// * `taille_tournoi` - Nombre d'individus tirés aléatoirement pour le tournoi.
 /// * `scores` - Fitness précalculées, alignées avec `population` (même longueur).
 /// * `rng` - Générateur aléatoire mutable (graine semée dans `evolution.rs`).
-pub fn selection_tournoi(
-    population: &[Combinaison],
+pub fn selection_tournoi<'a>(
+    population: &'a [Combinaison],
     taille_tournoi: usize,
     scores: &[f64],
     rng: &mut StdRng,
-) -> Result<&Combinaison, SelectionError> {
+) -> Result<&'a Combinaison, SelectionError> {
     if population.is_empty() {
         return Err(SelectionError::PopulationVide);
     }
