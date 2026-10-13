@@ -127,3 +127,32 @@ pub fn est_valide(combinaison: &Combinaison, config: &Config) -> Result<(), Vali
 
     Ok(())
 }
+
+/// Répare une combinaison invalide en supprimant aléatoirement des plantes.
+/// 1. Si la combinaison est valide, la retourner telle quelle.
+/// 2. Sinon, supprimer une plante aléatoire et réessayer (jusqu'à 100 tentatives).
+/// 3. Un bac vide étant valide, la réparation aboutit toujours avant l'épuisement.
+///
+/// Partagée par tous les opérateurs génétiques (crossover, mutation).
+pub(crate) fn reparer(
+    mut combinaison: Combinaison,
+    config: &Config,
+    rng: &mut rand::rngs::StdRng,
+) -> Result<Combinaison, super::crossover::CrossoverError> {
+    let max_tentatives = 100;
+    for _ in 0..max_tentatives {
+        if est_valide(&combinaison, config).is_ok() {
+            return Ok(combinaison);
+        }
+
+        if combinaison.plantes.is_empty() {
+            // Plus de plantes : bac vide, valide par définition
+            return Ok(combinaison);
+        }
+
+        let idx = rng.gen_range(0..combinaison.plantes.len());
+        combinaison.plantes.remove(idx);
+    }
+
+    Err(super::crossover::CrossoverError::ReparationImpossible(max_tentatives))
+}
