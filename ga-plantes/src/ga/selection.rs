@@ -1,4 +1,4 @@
-use ga_plantes::models::Combinaison;
+use crate::models::Combinaison;
 use rand::Rng;
 use rand::rngs::StdRng;
 use thiserror::Error;
@@ -25,12 +25,12 @@ pub enum SelectionError {
 /// * `taille_tournoi` - Nombre d'individus tirés aléatoirement pour le tournoi.
 /// * `rng` - Générateur aléatoire mutable (ex: `&mut StdRng`).
 /// * `score_fn` - Fonction de scoring (fitness) fournie par l'utilisateur.
-pub fn selection_tournoi<F>(
-    population: &[Combinaison],
+pub fn selection_tournoi<'a, F>(
+    population: &'a [Combinaison],
     taille_tournoi: usize,
     rng: &mut StdRng,
     score_fn: F,
-) -> Result<&Combinaison, SelectionError>
+) -> Result<&'a Combinaison, SelectionError>
 where
     F: Fn(&Combinaison) -> f64,
 {
