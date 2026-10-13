@@ -19,6 +19,7 @@ pub enum MutationError {
 /// **Opérations possibles** (choisies aléatoirement à 50/50) :
 /// - Retirer une plante aléatoire de la combinaison.
 /// - Ajouter une plante aléatoire du pool, **absente de la combinaison**.
+///
 /// **Note** : "Déplacer" n'est pas implémenté car `Combinaison` est une liste
 /// (pas une grille avec positions) — la diversité spatiale viendra en M2-c.
 ///
