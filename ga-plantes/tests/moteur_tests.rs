@@ -163,10 +163,15 @@ fn test_erreur_population_vide() {
 fn test_erreur_taille_tournoi_invalide() {
     let pool = vec![plante_test("tomate", 50, 50)];
     let bac = bac_test();
-    let population_initiale = vec![Combinaison::new(vec![], bac)];
+    let population_initiale = vec![
+        Combinaison::new(vec![], bac.clone()),
+        Combinaison::new(vec![], bac.clone()),
+        Combinaison::new(vec![], bac),
+    ];
     let config = config_test(42, 10, 5, 0.1, 0.8);
 
-    // taille_tournoi = 0 : invalide
+    // taille_tournoi = 0 : invalide — la boucle de remplissage (population 3,
+    // élitisme 2) appelle la sélection, qui doit rejeter la taille 0
     let result = evoluer(population_initiale, &pool, &config, 0, score_simple);
     assert!(result.is_err());
 }

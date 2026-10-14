@@ -8,9 +8,6 @@ use thiserror::Error;
 /// Erreurs possibles lors du croisement.
 #[derive(Error, Debug)]
 pub enum CrossoverError {
-    #[error("Parents vides : impossible de croiser")]
-    ParentsVides,
-
     #[error("Réparation impossible : aucune combinaison valide trouvée après {0} tentatives")]
     ReparationImpossible(usize),
 }
@@ -20,6 +17,8 @@ pub enum CrossoverError {
 ///   - **Plantes** : mélange uniforme (chaque plante a 50% de chance de venir
 ///     de parent1 ou parent2), **dédupliqué par id** (pas de doublon de plante).
 ///   - **Bac** : choix aléatoire entre les bacs des deux parents.
+/// - **Parents vides** : cas normal, non une erreur — les enfants sont alors
+///   les copies des parents (un bac vide reste valide, la fitness le pénalise).
 /// - **Réparation** : si l'enfant est invalide, supprime aléatoirement des
 ///   plantes jusqu'à validité (un bac vide est valide par définition).
 ///
@@ -31,8 +30,9 @@ pub fn crossover(
     config: &Config,
     rng: &mut StdRng,
 ) -> Result<(Combinaison, Combinaison), CrossoverError> {
+    // Cas dégénéré : deux bacs vides -> copies des parents (pas d'erreur)
     if parent1.plantes.is_empty() && parent2.plantes.is_empty() {
-        return Err(CrossoverError::ParentsVides);
+        return Ok((parent1.clone(), parent2.clone()));
     }
 
     let enfant1_plantes = croisement_uniforme(&parent1.plantes, &parent2.plantes, rng);
