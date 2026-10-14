@@ -1,4 +1,4 @@
-use ga_plantes::cli::{load_and_validate_data, Config};
+use ga_plantes::cli::Config;
 use ga_plantes::ga::evolution::{evoluer, EvolutionError};
 use ga_plantes::models::{
     Bac, BesoinsNutriments, Combinaison, DimensionsCm, Exposition, Niveau, Plante, Protection,
