@@ -103,6 +103,10 @@ pub struct Args {
 
     #[arg(short, long, default_value = "data/config.json")]
     pub config_path: PathBuf,
+
+    /// Surcharge la seed du config.json (reproductibilité des runs)
+    #[arg(long)]
+    pub seed: Option<u64>,
 }
 
 /// Charge et désérialise un fichier JSON vers le type `T`.
