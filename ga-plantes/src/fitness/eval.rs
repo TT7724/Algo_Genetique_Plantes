@@ -1,6 +1,7 @@
 // ga-plantes/src/fitness/eval.rs
 use crate::cli::Interaction;
-use crate::models::{Combinaison, InteractionType, Intensite};
+use crate::cli::{InteractionType, Intensite};
+use crate::models::Combinaison;
 
 /// Contexte immuable : interactions chargées une fois au démarrage.
 pub struct Evaluateur {
@@ -18,7 +19,7 @@ impl Evaluateur {
         let rendement: f64 = combinaison
             .plantes
             .iter()
-            .map(|p| p.rendement.valeur)
+            .map(|p| p.rendement.valeur as f64)
             .sum();
 
         // 2. Interactions entre paires de plantes du bac
