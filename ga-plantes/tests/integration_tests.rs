@@ -30,19 +30,20 @@ fn test_un_seul_bac_de_reference() {
 }
 
 #[test]
-fn test_carotte_dans_bac_de_reference_invalide() {
-    // La carotte (racines 30 cm) ne tient pas dans 25 cm de terre
-    // du bac de référence.
+fn test_courgette_dans_bac_de_reference_invalide() {
+    // Le bac de référence a 40 cm de terre depuis le passage au mono-bac :
+    // la carotte (racines 30 cm) y est désormais VALIDE — le test
+    // d'invalidité migre vers la courgette (racines 50 cm).
     let (plantes, bacs, _, config) = charger_donnees();
     let bac = bacs.iter().find(|b| b.id == "reference").expect("Bac 'reference' introuvable");
-    let carotte = plantes.iter().find(|p| p.id == "carotte").expect("Plante 'carotte' introuvable");
+    let courgette = plantes.iter().find(|p| p.id == "courgette").expect("Plante 'courgette' introuvable");
 
-    let combinaison = Combinaison::new(vec![carotte.clone()], bac.clone());
+    let combinaison = Combinaison::new(vec![courgette.clone()], bac.clone());
     let result = est_valide(&combinaison, &config);
 
     assert!(
-        matches!(result, Err(ValidationError::RacinesTropProfondes(30, 25))),
-        "La carotte (30 cm de racines) ne devrait pas tenir dans le bac de référence (25 cm de terre)"
+        matches!(result, Err(ValidationError::RacinesTropProfondes(50, 40))),
+        "La courgette (50 cm de racines) ne devrait pas tenir dans le bac de référence (40 cm de terre)"
     );
 }
 

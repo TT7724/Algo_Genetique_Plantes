@@ -57,7 +57,7 @@
       "K": "eleve"
     },
     "besoin_eau": "moyen",
-    "enracinement_eau": true,
+    "enracinement_eau": false,
     "substrats_compatibles": [
       "fibre_de_coco",
       "terreau"
@@ -133,9 +133,10 @@
       "K": "eleve"
     },
     "besoin_eau": "moyen",
-    "enracinement_eau": true,
+    "enracinement_eau": false,
     "substrats_compatibles": [
-      "fibre_de_coco"
+      "fibre_de_coco",
+      "terreau"
     ],
     "saison": [
       "ete"
