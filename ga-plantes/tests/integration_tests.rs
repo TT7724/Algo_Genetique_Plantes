@@ -48,14 +48,17 @@ fn test_courgette_dans_bac_de_reference_invalide() {
 }
 
 #[test]
-fn test_basilic_en_bac_hydroponique_valide() {
+fn test_laitue_en_bac_hydroponique_valide() {
     // Valide le fix hydroponique : un bac hydro (0 cm de terre, aucun
     // substrat) doit pouvoir accueillir une plante à enracinement eau.
     // Bac construit en fixture : le test vise la LOGIQUE de validation,
     // pas le contenu de bacs.json (qui ne contient plus qu'un bac terre).
+    // Plante : la laitue est la seule à garder enracinement_eau = true
+    // (le basilic pousse désormais en terre dans le bac de référence).
     let (plantes, _, _, config) = charger_donnees();
-    let basilic = plantes.iter().find(|p| p.id == "basilic").expect("Plante 'basilic' introuvable");
+    let laitue = plantes.iter().find(|p| p.id == "laitue").expect("Plante 'laitue' introuvable");
 
+    // Bac hydro calé sur la laitue : saison printemps, 10-20 °C, mi-ombre
     let bac_hydro = Bac {
         id: "hydro_fixture".to_string(),
         nom: "Bac hydroponique (fixture)".to_string(),
@@ -66,13 +69,13 @@ fn test_basilic_en_bac_hydroponique_valide() {
         substrats: vec![],
         compost_disponible: false,
         drainage_eau: true,
-        exposition: Exposition::PleinSoleil,
-        saison_cible: Saison::Ete,
-        temp_moyenne_c: TempMoyenneC { min: 20, max: 30 },
+        exposition: Exposition::MiOmbre,
+        saison_cible: Saison::Printemps,
+        temp_moyenne_c: TempMoyenneC { min: 10, max: 20 },
     };
 
-    let combinaison = Combinaison::new(vec![basilic.clone()], bac_hydro);
+    let combinaison = Combinaison::new(vec![laitue.clone()], bac_hydro);
     let result = est_valide(&combinaison, &config);
 
-    assert!(result.is_ok(), "Le basilic devrait être valide dans un bac hydroponique : {result:?}");
+    assert!(result.is_ok(), "La laitue devrait être valide dans un bac hydroponique : {result:?}");
 }
