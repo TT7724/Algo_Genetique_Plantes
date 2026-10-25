@@ -4,7 +4,7 @@
 
 use ga_plantes::cli::load_and_validate_data;
 use ga_plantes::ga::validation::{est_valide, ValidationError};
-use ga_plantes::models::Combinaison;
+use ga_plantes::models::{Bac, Combinaison, DimensionsCm, Exposition, Protection, Saison, TempMoyenneC};
 use std::path::Path;
 
 fn charger_donnees() -> (Vec<ga_plantes::models::Plante>, Vec<ga_plantes::models::Bac>, Vec<ga_plantes::cli::Interaction>, ga_plantes::cli::Config) {
@@ -21,32 +21,57 @@ fn test_load_and_validate_data_reelles() {
 }
 
 #[test]
-fn test_carotte_dans_bac_contraint_invalide() {
-    // Scénario construit dès M1 : le bac contraint (15 cm de terre)
-    // ne peut pas accueillir la carotte (racines 30 cm).
+fn test_un_seul_bac_de_reference() {
+    // Le dataset v1 ne contient qu'un bac : l'environnement de référence.
+    // (Anciennement 3 bacs ; l'AG optimise pour un bac donné — v1 du plan.)
+    let (_, bacs, _, _) = charger_donnees();
+    assert_eq!(bacs.len(), 1);
+    assert_eq!(bacs[0].id, "reference");
+}
+
+#[test]
+fn test_carotte_dans_bac_de_reference_invalide() {
+    // La carotte (racines 30 cm) ne tient pas dans 25 cm de terre
+    // du bac de référence.
     let (plantes, bacs, _, config) = charger_donnees();
-    let bac_contraint = bacs.iter().find(|b| b.id == "contraint").expect("Bac 'contraint' introuvable");
+    let bac = bacs.iter().find(|b| b.id == "reference").expect("Bac 'reference' introuvable");
     let carotte = plantes.iter().find(|p| p.id == "carotte").expect("Plante 'carotte' introuvable");
 
-    let combinaison = Combinaison::new(vec![carotte.clone()], bac_contraint.clone());
+    let combinaison = Combinaison::new(vec![carotte.clone()], bac.clone());
     let result = est_valide(&combinaison, &config);
 
     assert!(
-        matches!(result, Err(ValidationError::RacinesTropProfondes(30, 15))),
-        "La carotte (30 cm de racines) ne devrait pas tenir dans le bac contraint (15 cm de terre)"
+        matches!(result, Err(ValidationError::RacinesTropProfondes(30, 25))),
+        "La carotte (30 cm de racines) ne devrait pas tenir dans le bac de référence (25 cm de terre)"
     );
 }
 
 #[test]
-fn test_basilic_dans_bac_hydro_valide() {
+fn test_basilic_en_bac_hydroponique_valide() {
     // Valide le fix hydroponique : un bac hydro (0 cm de terre, aucun
     // substrat) doit pouvoir accueillir une plante à enracinement eau.
-    let (plantes, bacs, _, config) = charger_donnees();
-    let bac_hydro = bacs.iter().find(|b| b.id == "hydro").expect("Bac 'hydro' introuvable");
+    // Bac construit en fixture : le test vise la LOGIQUE de validation,
+    // pas le contenu de bacs.json (qui ne contient plus qu'un bac terre).
+    let (plantes, _, _, config) = charger_donnees();
     let basilic = plantes.iter().find(|p| p.id == "basilic").expect("Plante 'basilic' introuvable");
 
-    let combinaison = Combinaison::new(vec![basilic.clone()], bac_hydro.clone());
+    let bac_hydro = Bac {
+        id: "hydro_fixture".to_string(),
+        nom: "Bac hydroponique (fixture)".to_string(),
+        dimensions_cm: DimensionsCm { longueur: 150, largeur: 100, hauteur: 25 },
+        hauteur_terre_cm: 0,
+        marge_bord_cm: 2,
+        protection: Protection::SerreChauffee,
+        substrats: vec![],
+        compost_disponible: false,
+        drainage_eau: true,
+        exposition: Exposition::PleinSoleil,
+        saison_cible: Saison::Ete,
+        temp_moyenne_c: TempMoyenneC { min: 20, max: 30 },
+    };
+
+    let combinaison = Combinaison::new(vec![basilic.clone()], bac_hydro);
     let result = est_valide(&combinaison, &config);
 
-    assert!(result.is_ok(), "Le basilic devrait être valide dans le bac hydroponique : {result:?}");
+    assert!(result.is_ok(), "Le basilic devrait être valide dans un bac hydroponique : {result:?}");
 }
