@@ -7,7 +7,7 @@ use ga_plantes::ga::validation::est_valide;
 use ga_plantes::models::{Combinaison, Plante};
 use rand::rngs::StdRng;
 use rand::seq::SliceRandom;
-use rand::{Rng, SeedableRng};
+use rand::SeedableRng;
 
 fn main() -> Result<()> {
     // 1. Parse les arguments CLI
