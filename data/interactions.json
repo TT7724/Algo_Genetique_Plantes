@@ -68,5 +68,96 @@
     "type": "compagnonnage",
     "intensite": "moyenne",
     "confiance": "faible"
+  },
+  {
+    "plante_a": "tomate",
+    "plante_b": "poivron",
+    "type": "competition_eau",
+    "intensite": "moyenne",
+    "confiance": "moyenne"
+  },
+  {
+    "plante_a": "tomate",
+    "plante_b": "haricot_nain",
+    "type": "compagnonnage",
+    "intensite": "faible",
+    "confiance": "moyenne"
+  },
+  {
+    "plante_a": "poivron",
+    "plante_b": "basilic",
+    "type": "compagnonnage",
+    "intensite": "moyenne",
+    "confiance": "faible"
+  },
+  {
+    "plante_a": "poivron",
+    "plante_b": "haricot_nain",
+    "type": "neutre",
+    "intensite": "faible",
+    "confiance": "faible"
+  },
+  {
+    "plante_a": "carotte",
+    "plante_b": "oignon",
+    "type": "compagnonnage",
+    "intensite": "forte",
+    "confiance": "moyenne"
+  },
+  {
+    "plante_a": "carotte",
+    "plante_b": "ciboulette",
+    "type": "compagnonnage",
+    "intensite": "moyenne",
+    "confiance": "moyenne"
+  },
+  {
+    "plante_a": "carotte",
+    "plante_b": "radis",
+    "type": "compagnonnage",
+    "intensite": "moyenne",
+    "confiance": "moyenne"
+  },
+  {
+    "plante_a": "haricot_nain",
+    "plante_b": "oignon",
+    "type": "competition_racinaire",
+    "intensite": "faible",
+    "confiance": "faible"
+  },
+  {
+    "plante_a": "aubergine",
+    "plante_b": "thym",
+    "type": "compagnonnage",
+    "intensite": "faible",
+    "confiance": "faible"
+  },
+  {
+    "plante_a": "aubergine",
+    "plante_b": "basilic",
+    "type": "compagnonnage",
+    "intensite": "moyenne",
+    "confiance": "faible"
+  },
+  {
+    "plante_a": "menthe",
+    "plante_b": "carotte",
+    "type": "competition_racinaire",
+    "intensite": "moyenne",
+    "confiance": "faible"
+  },
+  {
+    "plante_a": "thym",
+    "plante_b": "ciboulette",
+    "type": "neutre",
+    "intensite": "faible",
+    "confiance": "faible"
+  },
+  {
+    "plante_a": "radis",
+    "plante_b": "tomate",
+    "type": "neutre",
+    "intensite": "faible",
+    "confiance": "faible"
   }
 ]
