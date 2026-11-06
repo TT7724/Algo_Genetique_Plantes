@@ -38,7 +38,7 @@ fn main() -> Result<()> {
         tentatives += 1;
         if tentatives > MAX_TENTATIVES {
             bail!(
-                "Impossible de générer {} combinaisons valides en {} tentatives —                  les contraintes des données sont peut-être trop strictes",
+                "Impossible de générer {} combinaisons valides en {} tentatives — les contraintes des données sont peut-être trop strictes",
                 config.algorithme.population,
                 MAX_TENTATIVES
             );
@@ -69,7 +69,36 @@ fn main() -> Result<()> {
     )
     .context("Échec de l'évolution")?;
 
-    // 7. Affiche le potager gagnant
+    // 7a. Mode JSON : sortie structurée pour le notebook (configuré en amont,
+    //     il écrit lui-même bacs.json puis parse ce résultat)
+    if args.json {
+        let detail = evaluateur.evaluer_detail(&result.meilleur_individu);
+        let sortie = serde_json::json!({
+            "seed": config.algorithme.seed,
+            "generations": result.generations,
+            "meilleur": {
+                "bac": result.meilleur_individu.bac.id,
+                "plantes": result.meilleur_individu.plantes.iter().map(|p| serde_json::json!({
+                    "id": p.id, "nom": p.nom, "famille": p.famille,
+                })).collect::<Vec<_>>(),
+                "score": detail.total,
+                "detail": {
+                    "rendement": detail.rendement * 5.0,
+                    "interactions": detail.interactions * 7.0,
+                    "occupation": detail.occupation * 10.0,
+                    "interactions_actives": detail.interactions_actives,
+                },
+            },
+            "population": result.population_finale.iter().map(|c| serde_json::json!({
+                "plantes": c.plantes.iter().map(|p| p.id.clone()).collect::<Vec<_>>(),
+                "score": evaluateur.evaluer(c),
+            })).collect::<Vec<_>>(),
+        });
+        println!("{}", serde_json::to_string_pretty(&sortie)?);
+        return Ok(());
+    }
+
+    // 7b. Mode texte : le potager gagnant, lisible dans un terminal
     println!("=== Potager gagnant ===");
     println!(
         "Bac : {} ({} cm x {} cm)",

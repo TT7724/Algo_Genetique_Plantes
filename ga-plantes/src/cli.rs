@@ -107,6 +107,10 @@ pub struct Args {
     /// Surcharge la seed du config.json (reproductibilité des runs)
     #[arg(long)]
     pub seed: Option<u64>,
+
+    /// Sortie JSON structurée (pour le notebook / l'orchestrateur Python)
+    #[arg(long)]
+    pub json: bool,
 }
 
 /// Charge et désérialise un fichier JSON vers le type `T`.
