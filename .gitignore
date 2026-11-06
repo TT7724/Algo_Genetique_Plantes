@@ -10,3 +10,5 @@ __pycache__/
 # Sorties
 orchestrator/sorties/
 *.png
+# Bac configuré depuis le notebook (hors git)
+data/bacs.local.json

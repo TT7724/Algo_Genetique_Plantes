@@ -10,7 +10,7 @@ use std::path::Path;
 fn charger_donnees() -> (Vec<ga_plantes::models::Plante>, Vec<ga_plantes::models::Bac>, Vec<ga_plantes::cli::Interaction>, ga_plantes::cli::Config) {
     let data_dir = Path::new("../data/");
     let config_path = Path::new("../data/config.json");
-    load_and_validate_data(data_dir, config_path).expect("Échec du chargement des données réelles")
+    load_and_validate_data(data_dir, config_path, None).expect("Échec du chargement des données réelles")
 }
 
 #[test]

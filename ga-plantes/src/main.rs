@@ -15,7 +15,7 @@ fn main() -> Result<()> {
 
     // 2. Charge et valide les données (propage l'erreur avec anyhow)
     let (plantes, bacs, interactions, mut config) =
-        load_and_validate_data(&args.data_dir, &args.config_path)
+        load_and_validate_data(&args.data_dir, &args.config_path, args.bacs.as_deref())
             .context("Échec du chargement ou de la validation des données")?;
 
     // 3. Surcharge la seed si fournie via CLI
