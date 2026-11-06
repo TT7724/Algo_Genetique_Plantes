@@ -34,7 +34,11 @@ pub enum ValidationError {
 /// "racines <= hauteur de terre" et "substrat commun" sont neutralisées —
 /// les racines vivent dans l'eau, il n'y a ni terre ni substrat.
 pub fn est_valide(combinaison: &Combinaison, config: &Config) -> Result<(), ValidationError> {
-    let est_hydro = combinaison.bac.drainage_eau;
+    // Un bac hydroponique = drainage **ET aucun substrat** (racines dans
+    // l'eau). Un simple bac drainé avec de la terre (trous au fond, usage
+    // extérieur courant) n'est PAS hydroponique : les contraintes de
+    // profondeur de racines et de substrat s'appliquent normalement.
+    let est_hydro = combinaison.bac.drainage_eau && combinaison.bac.substrats.is_empty();
 
     // 1. Surface totale des plantes <= surface utile du bac
     // Approximation conservative : chaque plante occupe un carré de côté = espacement_min_cm
