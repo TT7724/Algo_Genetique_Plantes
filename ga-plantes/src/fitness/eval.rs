@@ -89,7 +89,7 @@ impl Evaluateur {
             let (delta, type_nom) = match it.r#type {
                 InteractionType::Compagnonnage => (poids_intensite, "compagnonnage"),
                 InteractionType::Neutre => (0.0, "neutre"),
-                InteractionType::CompetitionRacine => (-poids_intensite, "compétition racinaire"),
+                InteractionType::CompetitionRacinaire => (-poids_intensite, "compétition racinaire"),
                 InteractionType::CompetitionEau => (-poids_intensite, "compétition eau"),
                 InteractionType::CompetitionLumiere => (-poids_intensite, "compétition lumière"),
             };
