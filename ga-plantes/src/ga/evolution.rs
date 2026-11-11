@@ -12,6 +12,9 @@ use thiserror::Error;
 pub struct EvolutionResult {
     pub meilleur_individu: Combinaison,
     pub generations: usize,
+    /// Population de la dernière génération — pour analyser la diversité
+    /// et comparer les bonnes/mauvaises propositions (orchestrateur M3).
+    pub population_finale: Vec<Combinaison>,
 }
 
 /// Erreurs possibles lors de l'évolution.
@@ -98,6 +101,7 @@ where
                 return Ok(EvolutionResult {
                     meilleur_individu: meilleur_individu_global.expect("initialisé à la génération 0"),
                     generations: generations_execuees,
+                    population_finale: population,
                 });
             }
         }
@@ -145,5 +149,6 @@ where
     Ok(EvolutionResult {
         meilleur_individu: meilleur_individu_global.expect("initialisé à la génération 0"),
         generations: generations_execuees,
+        population_finale: population,
     })
 }

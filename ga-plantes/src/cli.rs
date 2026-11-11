@@ -107,6 +107,15 @@ pub struct Args {
     /// Surcharge la seed du config.json (reproductibilité des runs)
     #[arg(long)]
     pub seed: Option<u64>,
+
+    /// Sortie JSON structurée (pour le notebook / l'orchestrateur Python)
+    #[arg(long)]
+    pub json: bool,
+
+    /// Fichier de bacs alternatif (défaut : <data-dir>/bacs.json).
+    /// Le notebook l'utilise avec data/bacs.local.json, hors git.
+    #[arg(long)]
+    pub bacs: Option<PathBuf>,
 }
 
 /// Charge et désérialise un fichier JSON vers le type `T`.
@@ -159,9 +168,11 @@ pub fn validate_references(
 pub fn load_and_validate_data(
     data_dir: &Path,
     config_path: &Path,
+    bacs_path: Option<&Path>,
 ) -> Result<DonneesChargees, CliError> {
     let plantes = load_json::<Vec<Plante>>(&data_dir.join("plantes.json"))?;
-    let bacs = load_json::<Vec<Bac>>(&data_dir.join("bacs.json"))?;
+    let chemin_bacs = bacs_path.map(Path::to_path_buf).unwrap_or_else(|| data_dir.join("bacs.json"));
+    let bacs = load_json::<Vec<Bac>>(&chemin_bacs)?;
     let interactions = load_json::<Vec<Interaction>>(&data_dir.join("interactions.json"))?;
     let config = load_json::<Config>(config_path)?;
 

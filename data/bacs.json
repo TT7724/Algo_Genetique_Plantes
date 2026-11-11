@@ -5,17 +5,18 @@
     "dimensions_cm": {
       "longueur": 120,
       "largeur": 80,
-      "hauteur": 30
+      "hauteur": 50
     },
-    "hauteur_terre_cm": 25,
+    "hauteur_terre_cm": 40,
     "marge_bord_cm": 5,
     "protection": "exterieur",
     "substrats": [
       "terreau",
-      "compost"
+      "compost",
+      "fibre_de_coco"
     ],
     "compost_disponible": true,
-    "drainage_eau": false,
+    "drainage_eau": true,
     "exposition": "plein_soleil",
     "saison_cible": "ete",
     "temp_moyenne_c": {
