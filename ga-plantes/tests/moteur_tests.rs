@@ -175,3 +175,35 @@ fn test_erreur_taille_tournoi_invalide() {
     let result = evoluer(population_initiale, &pool, &config, 0, score_simple);
     assert!(result.is_err());
 }
+
+#[test]
+fn test_historique_coherent() {
+    // L'historique couvre exactement les générations exécutées, et la
+    // fitness max ne régresse jamais (l'élitisme reporte le champion).
+    let pool = vec![plante_test("tomate", 50, 100), plante_test("laitue", 25, 50)];
+    let bac = bac_test();
+    let population_initiale = vec![
+        Combinaison::new(vec![plante_test("tomate", 50, 100)], bac.clone()),
+        Combinaison::new(vec![plante_test("laitue", 25, 50)], bac.clone()),
+    ];
+    // patience 100 > generations_max 10 : pas d'early stopping, run complet
+    let config = config_test(42, 10, 100, 0.1, 0.8);
+
+    let result = evoluer(population_initiale, &pool, &config, 2, score_simple).unwrap();
+
+    assert_eq!(result.historique.len(), result.generations);
+    for fenetre in result.historique.windows(2) {
+        assert!(
+            fenetre[1].fitness_max >= fenetre[0].fitness_max - 1e-9,
+            "La fitness max a régressé entre les générations {} et {}",
+            fenetre[0].generation, fenetre[1].generation
+        );
+    }
+    // La présence est triée par id (JSON déterministe)
+    for gen in &result.historique {
+        let ids: Vec<&str> = gen.presence_plantes.iter().map(|(id, _)| id.as_str()).collect();
+        let mut tries = ids.clone();
+        tries.sort();
+        assert_eq!(ids, tries);
+    }
+}
