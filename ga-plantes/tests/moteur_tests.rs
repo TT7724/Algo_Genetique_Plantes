@@ -235,6 +235,6 @@ fn test_historique_presence_plantes() {
     let gen0 = &result.historique[0];
     let counts: std::collections::HashMap<&String, &usize> =
         gen0.presence_plantes.iter().map(|(id, n)| (id, n)).collect();
-    assert_eq!(counts.get(&"tomate".to_string()), Some(&2));
-    assert_eq!(counts.get(&"laitue".to_string()), Some(&1));
+    assert_eq!(counts.get(&"tomate".to_string()).copied(), Some(&2));
+    assert_eq!(counts.get(&"laitue".to_string()).copied(), Some(&1));
 }
