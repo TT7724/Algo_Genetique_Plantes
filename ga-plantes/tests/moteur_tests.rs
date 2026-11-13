@@ -175,3 +175,35 @@ fn test_erreur_taille_tournoi_invalide() {
     let result = evoluer(population_initiale, &pool, &config, 0, score_simple);
     assert!(result.is_err());
 }
+
+#[test]
+fn test_historique_convergence_et_presence() {
+    let pool = vec![plante_test("tomate", 50, 100), plante_test("laitue", 25, 50)];
+    let bac = bac_test();
+    let population_initiale = vec![
+        Combinaison::new(vec![plante_test("tomate", 50, 100)], bac.clone()),
+        Combinaison::new(vec![plante_test("laitue", 25, 50)], bac.clone()),
+    ];
+    // patience 50 > 20 générations : run complet, pas d'early stopping
+    let config = config_test(42, 20, 50, 0.2, 0.9);
+
+    let result = evoluer(population_initiale, &pool, &config, 2, score_simple).unwrap();
+
+    // L'historique couvre TOUTES les générations exécutées
+    assert_eq!(result.historique.len(), result.generations);
+
+    // fitness_max ne régresse jamais (garanti par l'élitisme)
+    for fenetre in result.historique.windows(2) {
+        assert!(
+            fenetre[1].fitness_max >= fenetre[0].fitness_max - 1e-9,
+            "fitness_max a régressé entre les générations {} et {}",
+            fenetre[0].generation, fenetre[1].generation
+        );
+    }
+
+    // La tomate (présente dans la population initiale) apparaît dès la génération 0
+    assert!(
+        result.historique[0].presence_plantes.iter().any(|(id, _)| id == "tomate"),
+        "la tomate devrait figurer dans la présence de la génération 0"
+    );
+}
