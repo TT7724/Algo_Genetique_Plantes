@@ -66,6 +66,7 @@ fn main() -> Result<()> {
         let sortie = serde_json::json!({
             "seed": config.algorithme.seed,
             "generations": result.generations,
+            "historique": result.historique,
             "meilleur": {
                 "bac": result.meilleur_individu.bac.id,
                 "plantes": result.meilleur_individu.plantes.iter().map(|p| serde_json::json!({
@@ -79,7 +80,6 @@ fn main() -> Result<()> {
                     "interactions_actives": detail.interactions_actives,
                 },
             },
-            "historique": result.historique,
             "population": result.population_finale.iter().map(|c| serde_json::json!({
                 "plantes": c.plantes.iter().map(|p| p.id.clone()).collect::<Vec<_>>(),
                 "score": evaluateur.evaluer(c),

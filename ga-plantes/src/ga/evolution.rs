@@ -5,18 +5,19 @@ use crate::ga::selection::{selection_tournoi, SelectionError};
 use crate::models::{Combinaison, Plante};
 use rand::rngs::StdRng;
 use rand::{Rng, SeedableRng};
+use std::collections::HashMap;
 use thiserror::Error;
 
-/// Statistiques d'une génération — la MESURE de l'évolution, sans effet
-/// sur le comportement du moteur (idée : brief "historique de population").
+/// Statistiques d'une génération — pour les courbes de convergence
+/// et de composition dans le notebook/orchestrateur.
 #[derive(Debug, Clone, serde::Serialize)]
 pub struct HistoriqueGeneration {
     pub generation: usize,
     pub fitness_min: f64,
     pub fitness_moyenne: f64,
     pub fitness_max: f64,
-    /// Nombre d'individus contenant chaque plante (id → occurrences).
-    /// Seules les plantes présentes au moins une fois figurent ici.
+    /// Nombre d'individus contenant chaque plante (id, occurrences).
+    /// Seules les plantes présentes au moins une fois figurent dans la liste.
     pub presence_plantes: Vec<(String, usize)>,
 }
 
@@ -28,8 +29,7 @@ pub struct EvolutionResult {
     /// Population de la dernière génération — pour analyser la diversité
     /// et comparer les bonnes/mauvaises propositions (orchestrateur M3).
     pub population_finale: Vec<Combinaison>,
-    /// Statistiques par génération : convergence de la fitness et
-    /// composition de la population (courbes du notebook).
+    /// Statistiques par génération (population initiale incluse en gen 0).
     pub historique: Vec<HistoriqueGeneration>,
 }
 
@@ -63,8 +63,8 @@ pub enum EvolutionError {
 /// 5. **Early stopping** : si aucune amélioration supérieure à
 ///    `early_stopping.seuil_amelioration` pendant `early_stopping.patience`
 ///    générations, on s'arrête et on retourne le meilleur individu jamais vu.
-/// 6. **Historique** : à chaque génération, min/moy/max de la fitness et
-///    présence de chaque plante sont enregistrés (mesure pure).
+/// 6. **Historique** : stats (fitness min/moy/max + présence des plantes)
+///    empilées à chaque génération, population initiale incluse.
 /// 7. **Aucune logique de fitness** dans le moteur : `score_fn` est injectée.
 pub fn evoluer<F>(
     population_initiale: Vec<Combinaison>,
@@ -100,29 +100,22 @@ where
         // a. Scores calculés UNE FOIS par génération
         let scores: Vec<f64> = population.iter().map(&score_fn).collect();
 
-        // a'. Historique : min / moyenne / max + présence des plantes.
-        //     Mesure seule — aucun effet sur la sélection ou le remplacement.
+        // a'. Historique : stats de cette génération (AVANT sélection/mutation)
         let fitness_min = scores.iter().cloned().fold(f64::INFINITY, f64::min);
         let fitness_max = scores.iter().cloned().fold(f64::NEG_INFINITY, f64::max);
         let fitness_moyenne = scores.iter().sum::<f64>() / scores.len() as f64;
-        let mut plante_counts: std::collections::HashMap<&str, usize> =
-            std::collections::HashMap::new();
+        let mut plante_counts: HashMap<String, usize> = HashMap::new();
         for combinaison in &population {
             for plante in &combinaison.plantes {
-                *plante_counts.entry(plante.id.as_str()).or_insert(0) += 1;
+                *plante_counts.entry(plante.id.clone()).or_insert(0) += 1;
             }
         }
-        let mut presence_plantes: Vec<(String, usize)> = plante_counts
-            .into_iter()
-            .map(|(id, n)| (id.to_string(), n))
-            .collect();
-        presence_plantes.sort(); // ordre stable, indépendant de la HashMap
         historique.push(HistoriqueGeneration {
             generation,
             fitness_min,
             fitness_moyenne,
             fitness_max,
-            presence_plantes,
+            presence_plantes: plante_counts.into_iter().collect(),
         });
 
         // b. Meilleur individu de la génération (tri d'indices, sans dépendance externe)

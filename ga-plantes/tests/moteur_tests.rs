@@ -177,33 +177,64 @@ fn test_erreur_taille_tournoi_invalide() {
 }
 
 #[test]
-fn test_historique_convergence_et_presence() {
+fn test_historique_len_egale_generations() {
     let pool = vec![plante_test("tomate", 50, 100), plante_test("laitue", 25, 50)];
     let bac = bac_test();
     let population_initiale = vec![
         Combinaison::new(vec![plante_test("tomate", 50, 100)], bac.clone()),
         Combinaison::new(vec![plante_test("laitue", 25, 50)], bac.clone()),
     ];
-    // patience 50 > 20 générations : run complet, pas d'early stopping
-    let config = config_test(42, 20, 50, 0.2, 0.9);
+    let config = config_test(42, 20, 50, 0.1, 0.8); // patience haute : pas d'early stop
 
     let result = evoluer(population_initiale, &pool, &config, 2, score_simple).unwrap();
-
-    // L'historique couvre TOUTES les générations exécutées
     assert_eq!(result.historique.len(), result.generations);
+    // gen 0 = population initiale
+    assert_eq!(result.historique[0].generation, 0);
+}
 
-    // fitness_max ne régresse jamais (garanti par l'élitisme)
-    for fenetre in result.historique.windows(2) {
+#[test]
+fn test_historique_fitness_max_jamais_decroissante() {
+    // L'élitisme garantit que le meilleur d'une génération ne peut pas
+    // régresser : fitness_max doit être croissante ou constante.
+    let pool = vec![
+        plante_test("tomate", 50, 100),
+        plante_test("laitue", 25, 50),
+        plante_test("courgette", 80, 200),
+    ];
+    let bac = bac_test();
+    let population_initiale = vec![
+        Combinaison::new(vec![plante_test("tomate", 50, 100)], bac.clone()),
+        Combinaison::new(vec![plante_test("laitue", 25, 50)], bac.clone()),
+        Combinaison::new(vec![plante_test("courgette", 80, 200)], bac.clone()),
+    ];
+    let config = config_test(42, 30, 50, 0.2, 0.9);
+
+    let result = evoluer(population_initiale, &pool, &config, 2, score_simple).unwrap();
+    let maxs: Vec<f64> = result.historique.iter().map(|h| h.fitness_max).collect();
+    for fenetre in maxs.windows(2) {
         assert!(
-            fenetre[1].fitness_max >= fenetre[0].fitness_max - 1e-9,
-            "fitness_max a régressé entre les générations {} et {}",
-            fenetre[0].generation, fenetre[1].generation
+            fenetre[1] >= fenetre[0] - 1e-9,
+            "fitness_max a régressé : {} -> {}",
+            fenetre[0], fenetre[1]
         );
     }
+}
 
-    // La tomate (présente dans la population initiale) apparaît dès la génération 0
-    assert!(
-        result.historique[0].presence_plantes.iter().any(|(id, _)| id == "tomate"),
-        "la tomate devrait figurer dans la présence de la génération 0"
-    );
+#[test]
+fn test_historique_presence_plantes() {
+    let pool = vec![plante_test("tomate", 50, 100), plante_test("laitue", 25, 50)];
+    let bac = bac_test();
+    let population_initiale = vec![
+        Combinaison::new(vec![plante_test("tomate", 50, 100)], bac.clone()),
+        Combinaison::new(vec![plante_test("tomate", 50, 100)], bac.clone()),
+        Combinaison::new(vec![plante_test("laitue", 25, 50)], bac.clone()),
+    ];
+    let config = config_test(42, 5, 50, 0.0, 0.0); // pas de variation : gen 0 figée
+
+    let result = evoluer(population_initiale, &pool, &config, 2, score_simple).unwrap();
+    let gen0 = &result.historique[0];
+    let counts: std::collections::HashMap<&String, &usize> =
+        gen0.presence_plantes.iter().map(|(id, n)| (id, n)).collect();
+    assert_eq!(counts.get(&"tomate".to_string()), Some(&2));
+    assert_eq!(counts.get(&"laitue".to_string()), Some(&1));
 }
