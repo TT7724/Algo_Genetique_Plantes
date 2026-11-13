@@ -66,6 +66,7 @@ fn main() -> Result<()> {
         let sortie = serde_json::json!({
             "seed": config.algorithme.seed,
             "generations": result.generations,
+            "historique": result.historique,
             "meilleur": {
                 "bac": result.meilleur_individu.bac.id,
                 "plantes": result.meilleur_individu.plantes.iter().map(|p| serde_json::json!({
